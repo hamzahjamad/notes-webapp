@@ -1,14 +1,14 @@
 <?php
 
-
-
 Route::get('/', function () {
-    return view('welcome');
-    //return redirect('login');
+    return redirect('login');
 });
 
-Route::view('/{path?}', 'welcome')
+Route::view('/app/{path?}', 'welcome')
      ->where('path', '.*')
-     ->name('react');
+     ->name('react')
+     ->middleware('auth');
 
 Auth::routes();
+
+Route::resource('/data/notes', 'NoteController');

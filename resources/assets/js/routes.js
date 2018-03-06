@@ -13,8 +13,8 @@ export default class Routes extends React.Component {
             <BrowserRouter>
                 <div>
                     <Navbar />
-                    <Route exact path="/" component={NoteList} />
-                    <Route path="/notes/:id" component={NoteDetail} /> 
+                    <Route exact path="/app" component={NoteList} />
+                    <Route path="/app/notes/:id" component={NoteDetail} /> 
                 </div>     
             </BrowserRouter>
         );
