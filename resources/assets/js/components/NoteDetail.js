@@ -6,12 +6,13 @@ export default class NoteDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            note: ''
+            note: '',
+            id: this.props.match.params.id
         }
     }
 
     componentDidMount() {
-        axios.get('/data/notes/1')
+        axios.get('/data/notes/'+this.state.id)
              .then(response => {
                  this.setState({
                      note: response.data

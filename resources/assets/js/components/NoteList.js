@@ -12,6 +12,8 @@ export default class NoteList extends React.Component {
             current_page: '',
             last_page: ''
         }
+
+        this.loadMore = this.loadMore.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +40,13 @@ export default class NoteList extends React.Component {
         }
     }
 
+    //todo
+    loadMore(e)
+    {
+        e.preventDefault();
+        console.log('load more');
+    }
+
     render() {
         return (
             <div className="container">
@@ -50,6 +59,7 @@ export default class NoteList extends React.Component {
                                 <ul>
                                     {this.noteRow()}
                                 </ul>
+                                <button className="btn btn-default" type="button" onClick={this.loadMore}>Load more</button>
                             </div>
 
                             current page {this.state.current_page} <br />
