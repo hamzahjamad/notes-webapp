@@ -1,2 +1,2 @@
 require('./bootstrap');
-import Routes from './routes';
+import Main from './main';

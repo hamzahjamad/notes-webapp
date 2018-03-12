@@ -2,18 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import Navbar from './components/Navbar';
 import NoteList from './components/NoteList';
 import NoteDetail from './components/NoteDetail';
 
 
-export default class Routes extends React.Component {
+export default class Main extends React.Component {
     render() {
         return (
             <BrowserRouter>
                 <div>
-                    <Navbar />
                     <Route exact path="/app" component={NoteList} />
+                    <Route exact path="/app/notes" component={NoteList} />
                     <Route path="/app/notes/:id" component={NoteDetail} /> 
                 </div>     
             </BrowserRouter>
@@ -22,5 +21,5 @@ export default class Routes extends React.Component {
 }
 
 if (document.getElementById('root')) {
-    ReactDOM.render(<Routes />, document.getElementById('root'));
+    ReactDOM.render(<Main />, document.getElementById('root'));
 }

@@ -71,13 +71,13 @@ class NoteController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        $note = Note::find($id);
+        $note = Note::with('contents')->find($id);
 
         if ($user->cannot('view', $note)) {
             return back();
         }
 
-        return view('notes.show', compact('note'));
+        return response()->json($note);
     }
 
     /**

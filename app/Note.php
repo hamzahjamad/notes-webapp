@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Note extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'content', 'type',
+        'title', 'slug', 'type',
     ];
+
 
     public function user()
     {
@@ -19,5 +20,11 @@ class Note extends Model
     public function getContentAttribute($value)
     {
         return json_decode($value);
+    }
+
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class);
     }
 }

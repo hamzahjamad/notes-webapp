@@ -7,8 +7,7 @@ $factory->define(App\Note::class, function (Faker $faker) {
 	$slug = str_slug($title, '-');
     return [
         'title' => $title, 
-        'slug'=> $slug, 
-        'content' => json_encode([$faker->paragraph()]), 
+        'slug'=> $slug,
         'type' => 'text',
     ];
 });

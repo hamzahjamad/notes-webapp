@@ -4,7 +4,7 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::view('/app/{path?}', 'welcome')
+Route::view('/app/{path?}', 'main')
      ->where('path', '.*')
      ->name('react')
      ->middleware('auth');

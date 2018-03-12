@@ -15,26 +15,21 @@ class UserTableSeeder extends Seeder
     {
         factory(App\User::class, 50)->create()->each(function($u){
         	//text
-        	for ($i=0; $i < 10; $i++) { 
-        		$u->notes()->save(factory(App\Note::class)->make());
-        	}
+            factory(App\Note::class, 10)->make()->each(function($n) use ($u) {
+                  $u->notes()->save($n);
+                  $n->contents()->save(factory(App\Content::class)->make());  
+            });
 
-        	$faker = Faker::create();
-        	//list
-        	for ($i=0; $i < 3; $i++) { 
-        		$u->notes()->save(
-        			factory(
-        				App\Note::class)->make([
-        					'type'=>'list',
-        					'content'=> json_encode([
-        						$faker->paragraph(),
-        						$faker->paragraph(),
-        						$faker->paragraph()
-        					]),
-        				]
-        			)
-        		);
-        	}
+
+            //list    
+            factory(App\Note::class, 10)->make(['type'=>'list'])->each(function($n) use ($u) {
+                  $u->notes()->save($n);
+
+                  factory(App\Content::class, 20)->make()->each(function($c) use ($n){
+                         $n->contents()->save($c);  
+                  });
+                 
+            });
         });
     }
 }
