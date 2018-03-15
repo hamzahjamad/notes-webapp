@@ -54628,7 +54628,8 @@ var NoteList = function (_React$Component) {
         _this.state = {
             notes: '',
             current_page: '',
-            last_page: ''
+            last_page: '',
+            disable_load_more: true
         };
 
         _this.loadMore = _this.loadMore.bind(_this);
@@ -54644,7 +54645,8 @@ var NoteList = function (_React$Component) {
                 _this2.setState({
                     notes: response.data.data,
                     current_page: response.data.current_page,
-                    last_page: response.data.last_page
+                    last_page: response.data.last_page,
+                    disable_load_more: response.data.current_page >= response.data.last_page
                 });
             }).catch(function (err) {
                 return console.log(err);
@@ -54675,8 +54677,51 @@ var NoteList = function (_React$Component) {
     }, {
         key: 'loadMore',
         value: function loadMore(e) {
+            var _this3 = this;
+
             e.preventDefault();
-            console.log('load more');
+            var nextPage = this.state.current_page + 1;
+
+            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get('/data/notes?page=' + nextPage).then(function (response) {
+                _this3.setState(function (prevState, props) {
+                    console.log('prevState', prevState);
+                    console.log('loadMore response', response.data);
+
+                    var _iteratorNormalCompletion = true;
+                    var _didIteratorError = false;
+                    var _iteratorError = undefined;
+
+                    try {
+                        for (var _iterator = response.data.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            var note = _step.value;
+
+                            prevState.notes.push(note);
+                        }
+                    } catch (err) {
+                        _didIteratorError = true;
+                        _iteratorError = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion && _iterator.return) {
+                                _iterator.return();
+                            }
+                        } finally {
+                            if (_didIteratorError) {
+                                throw _iteratorError;
+                            }
+                        }
+                    }
+
+                    return {
+                        notes: prevState.notes,
+                        current_page: response.data.current_page,
+                        last_page: response.data.last_page,
+                        disable_load_more: response.data.current_page >= response.data.last_page
+                    };
+                });
+            }).catch(function (err) {
+                return console.log(err);
+            });
         }
     }, {
         key: 'render',
@@ -54708,16 +54753,10 @@ var NoteList = function (_React$Component) {
                                 ),
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                     'button',
-                                    { className: 'btn btn-default', type: 'button', onClick: this.loadMore },
+                                    { className: 'btn btn-default', type: 'button', onClick: this.loadMore, disabled: this.state.disable_load_more },
                                     'Load more'
                                 )
-                            ),
-                            'current page ',
-                            this.state.current_page,
-                            ' ',
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                            'last page ',
-                            this.state.last_page
+                            )
                         )
                     )
                 )

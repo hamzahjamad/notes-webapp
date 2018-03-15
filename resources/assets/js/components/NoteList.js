@@ -10,7 +10,8 @@ export default class NoteList extends React.Component {
         this.state = {
             notes: '',
             current_page: '',
-            last_page: ''
+            last_page: '',
+            disable_load_more: true
         }
 
         this.loadMore = this.loadMore.bind(this);
@@ -22,7 +23,8 @@ export default class NoteList extends React.Component {
                  this.setState({
                      notes: response.data.data,
                      current_page: response.data.current_page,
-                     last_page: response.data.last_page
+                     last_page: response.data.last_page,
+                     disable_load_more: response.data.current_page >= response.data.last_page
                  });
              })
              .catch(err => console.log(err));
@@ -44,7 +46,29 @@ export default class NoteList extends React.Component {
     loadMore(e)
     {
         e.preventDefault();
-        console.log('load more');
+        var nextPage = this.state.current_page + 1;
+
+        axios.get('/data/notes?page=' + nextPage)
+             .then(response => {
+                   this.setState(function(prevState, props) {
+                    console.log('prevState', prevState);
+                    console.log('loadMore response', response.data);
+
+                    for (var note of response.data.data) {
+                      prevState.notes.push(note);
+                    }
+
+                      return {
+                        notes: prevState.notes,
+                        current_page: response.data.current_page,
+                        last_page: response.data.last_page,
+                        disable_load_more: response.data.current_page >= response.data.last_page
+                      };
+                    });
+             })
+             .catch(err => console.log(err));
+
+  
     }
 
     render() {
@@ -59,11 +83,8 @@ export default class NoteList extends React.Component {
                                 <ul>
                                     {this.noteRow()}
                                 </ul>
-                                <button className="btn btn-default" type="button" onClick={this.loadMore}>Load more</button>
+                                <button className="btn btn-default" type="button" onClick={this.loadMore} disabled={this.state.disable_load_more}>Load more</button>
                             </div>
-
-                            current page {this.state.current_page} <br />
-                            last page {this.state.last_page}
                         </div>
                     </div>
                 </div>
