@@ -23,18 +23,8 @@ class NoteController extends Controller
     {
         $notes = Auth::user()->notes()->paginate(5);
         return response()->json($notes);
-        //return view('notes.index', compact('notes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('notes.create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,6 +39,7 @@ class NoteController extends Controller
         $request->validate([
             'title' => 'required|unique:notes|max:30',
             'content' => 'required',
+            'type' => 'required',
         ]);
 
         $note = new Note;
@@ -74,29 +65,12 @@ class NoteController extends Controller
         $note = Note::with('contents')->find($id);
 
         if ($user->cannot('view', $note)) {
-            return back();
+            return 'cannot view';
         }
 
         return response()->json($note);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = Auth::user();
-        $note = Note::find($id);
-
-        if ($user->cannot('view', $note)) {
-            return back();
-        }
-
-        return view('notes.edit', compact('note'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -116,7 +90,7 @@ class NoteController extends Controller
         $user = Auth::user();
 
         if ($user->cannot('update', $note)) {
-            return back();
+            return 'cannot update';
         }
 
  
@@ -125,7 +99,7 @@ class NoteController extends Controller
         $note->save();
 
         
-        return redirect('notes/'.$id);
+        return redirect('app/notes/'.$id);
     }
 
     /**
@@ -139,14 +113,14 @@ class NoteController extends Controller
         $note = Note::find($id);
         $user = Auth::user();
 
-        if ($user->cannot('update', $note)) {
-            return back();
+        if ($user->cannot('delete', $note)) {
+            return 'cannot delete';
         }
 
         if ($note) {
             $note->delete();
         }
 
-        return redirect('notes');
+        return redirect('/');
     }
 }

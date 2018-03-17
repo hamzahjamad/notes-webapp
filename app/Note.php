@@ -27,4 +27,9 @@ class Note extends Model
     {
         return $this->hasMany(Content::class);
     }
+
+    public function getUserIdAttribute($value)
+    {
+        return (int) $value;
+    }
 }

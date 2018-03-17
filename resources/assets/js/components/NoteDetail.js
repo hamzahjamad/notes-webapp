@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 export default class NoteDetail extends React.Component {
 
@@ -46,6 +47,7 @@ export default class NoteDetail extends React.Component {
                                 <ul>
                                     {this.contentRow()}
                                 </ul>
+                                <Link className="btn btn-default" to={'/app/notes/'+this.state.note.id+'/edit'}>Edit</Link>
                             </div>
                         </div>
                     </div>

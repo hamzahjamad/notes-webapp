@@ -9,6 +9,8 @@ export default class NoteEdit extends React.Component {
             note: '',
             id: this.props.match.params.id
         }
+
+        this.saveNote = this.saveNote.bind(this);
     }
 
     componentDidMount() {
@@ -19,6 +21,11 @@ export default class NoteEdit extends React.Component {
                  });
              })
              .catch(err => console.log(err));
+    }
+
+    saveNote(e) {
+        e.preventDefault();
+        console.log("TODO work on save note");
     }
 
     contentRow() {
@@ -32,9 +39,9 @@ export default class NoteEdit extends React.Component {
                         )
                     } else {
                         return (
-                            <li key={i} >
-                                {object.content}
-                            </li>
+                            <div className="form-group" key={i}>
+                                <input type="email" className="form-control" placeholder="Email" defaultValue={object.content} />
+                            </div>
                         )
                     }
                 });
@@ -44,15 +51,7 @@ export default class NoteEdit extends React.Component {
 
     content()
     {
-        if(this.state.note.type == "text") {
-           return this.contentRow()
-        } else {
-            return (
-                    <ul>
-                        {this.contentRow()}
-                    </ul>
-            );
-        }
+        return this.contentRow()
     }
 
     render() {
@@ -64,7 +63,10 @@ export default class NoteEdit extends React.Component {
                             <div className="panel-heading">{this.state.note.title}</div>
 
                             <div className="panel-body">
-                                {this.content()}
+                                <form>
+                                    {this.content()}
+                                    <button className="btn btn-default" type="button" onClick={this.saveNote}>Save</button>
+                                </form>    
                             </div>
                         </div>
                     </div>

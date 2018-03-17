@@ -11,4 +11,4 @@ Route::view('/app/{path?}', 'main')
 
 Auth::routes();
 
-Route::resource('/data/notes', 'NoteController');
+Route::apiResource('/data/notes', 'NoteController');
