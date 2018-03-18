@@ -83,7 +83,7 @@ class NoteController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required',
+            'content' => 'required|array',
         ]);
 
         $note = Note::find($id);
@@ -93,13 +93,16 @@ class NoteController extends Controller
             return 'cannot update';
         }
 
- 
+        foreach ($request->content as $content) {
+            $c = \App\Content::find($content['id']);
+            $c->content = $content['content'];
+            $c->save();
+        }
+
         $note->title = $request->title;
-        $note->content = json_encode([$request->content]);
         $note->save();
 
-        
-        return redirect('app/notes/'.$id);
+        return response()->json($note);
     }
 
     /**
